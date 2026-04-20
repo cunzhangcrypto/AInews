@@ -58,6 +58,8 @@ def render_html_content(
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="https://img.cunzhangai.com/file/1776673303932_favicon.ico" type="image/x-icon">
+        <link rel="icon" href="https://img.cunzhangai.com/file/1776673303932_favicon.ico" type="image/x-icon">
         <title>Web3村长情报局</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
@@ -1930,7 +1932,7 @@ def render_html_content(
 
             <div class="footer">
                 <div class="footer-content">
-                    由 <span class="project-name">2026 Web3 村长</span>  ·
+                    由 <span class="project-name">Copyright © 2026 Web3村长</span>·All rights reserved
                     <a href="https://www.cunzhangblog.com/" target="_blank" class="footer-link">
                         博客教程
                     </a>"""
