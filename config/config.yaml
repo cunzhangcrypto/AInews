@@ -12,7 +12,6 @@ app:
 
 # ===============================================================
 # 1.5 调度系统
-# 💡 设为 false 以确保你手动点击 Run Workflow 时能立刻收到电报
 # ===============================================================
 schedule:
   enabled: false 
@@ -36,141 +35,154 @@ platforms:
 # ===============================================================
 rss:
   enabled: true
+  max_age_days: 2
+  
   feeds:
-    - id: "theblockbeats"
-      name: "律动"
-      url: "https://web3rss.vercel.app/theblockbeats" # 使用中转源更稳
-    - id: "foresight"
-      name: "Foresight"
-      url: "https://web3rss.vercel.app/foresightnews"
-    - id: "chaincatcher"
-      name: "链捕手"
-      url: "https://web3rss.vercel.app/chaincatcher"
-    - id: "goldenfinance"
-      name: "金色财经"
-      url: "http://api.jinse.com/no_auth/v1/ss/rss"
-      # --- 👨‍🌾 村长私人领地 ---
+    # --- 第一部分：AI & 前沿科技 ---
+    - id: "openai-blog"
+      url: "https://openai.com/blog/rss.xml"
+      category: "tech"
+      name: "OpenAI 官方博客"
+    - id: "google-research"
+      url: "https://research.google/blog/rss/"
+      category: "tech"
+      name: "Google Research"
+    - id: "mit-ai"
+      url: "https://www.technologyreview.com/topic/artificial-intelligence/feed/"
+      category: "tech"
+      name: "MIT 技术评论 (AI)"
+    - id: "huggingface"
+      url: "https://huggingface.co/blog/feed.xml"
+      category: "tech"
+      name: "Hugging Face"
+    - id: "marktechpost"
+      url: "https://www.marktechpost.com/feed/"
+      category: "tech"
+    - id: "bair-ai"
+      url: "https://bair.berkeley.edu/blog/feed.xml"
+      category: "tech"
+      name: "伯克利 AI 实验室"
+
+    # --- 第二部分：区块链 & Crypto ---
+    - id: "coindesk"
+      url: "https://www.coindesk.com/arc/outboundfeeds/rss/"
+      category: "crypto"
+      name: "CoinDesk"
+    - id: "cointelegraph"
+      url: "https://cointelegraph.com/rss"
+      category: "crypto"
+      name: "CoinTelegraph"
+    - id: "the-block"
+      url: "https://www.theblock.co/rss.xml"
+      category: "crypto"
+      name: "The Block"
+    - id: "messari"
+      url: "https://messari.io/rss"
+      category: "crypto"
+      name: "Messari"
+    - id: "bitdegree"
+      url: "https://www.bitdegree.org/crypto/news/rss"
+      category: "crypto"
+
+    # --- 第三部分：互联网 & 工具创业 ---
+    - id: "techcrunch"
+      url: "https://techcrunch.com/feed/"
+      category: "tech"
+      name: "TechCrunch"
+    - id: "the-verge"
+      url: "https://www.theverge.com/rss/index.xml"
+      category: "tech"
+      name: "The Verge"
+    - id: "hacker-news"
+      url: "https://hnrss.org/frontpage"
+      category: "tech"
+      name: "Hacker News"
+    - id: "product-hunt"
+      url: "https://www.producthunt.com/feed"
+      category: "tech"
+      name: "Product Hunt"
+    - id: "techbuzz"
+      url: "https://www.techbuzz.ai/api/rss/articles"
+      category: "tech"
+
+    # --- 👨‍🌾 村长私人领地 ---
     - id: "cunzhang-blog"
       name: "村长博客"
-      url: "https://www.cunzhangblog.com/feed" # 如果你的域名变了，请记得修改这里
-      display:
-  standalone:
-    # 把村长博客加入独立分析区，AI 会专门为你的文章写摘要
-    rss_feeds: ["cunzhang-blog", "theblockbeats", "foresight-news"]
-    max_items: 20
+      url: "https://www.cunzhangblog.com/feed"
+      category: "personal"
 
 # ===============================================================
-# 4. 报告模式
+# 4. 报告模式与展示
 # ===============================================================
 report:
   mode: "current"
   display_mode: "keyword"
   sort_by_position_first: false
-  rank_threshold: 5
-  max_news_per_keyword: 0
+
+display:
+  title: "Web3 村长情报局"
+  subtitle: "AI 每日精选：科技前沿与加密趋势"
+  region_order:
+    - standalone
+    - ai_analysis
+    - hotlist
+    - rss
+  regions:
+    hotlist: true
+    new_items: false
+    rss: true
+    standalone: true
+    ai_analysis: true
+  standalone:
+    # 这里是重头戏：确保你的博客和几个核心源会被 AI 重点照顾
+    rss_feeds: ["cunzhang-blog", "openai-blog", "the-block"]
+    max_items: 15
 
 # ===============================================================
-# 4.5 筛选策略 (由 AI 决定哪些内容符合 Web3 村长的兴趣)
+# 5. 策略设置 (AI、筛选、存储)
 # ===============================================================
 filter:
   method: "ai"
   priority_sort_enabled: true
 
-# ===============================================================
-# 5. 推送内容控制
-# ===============================================================
-display:
-  region_order:
-    - new_items
-    - hotlist
-    - rss
-    - standalone
-    - ai_analysis
-  regions:
-    hotlist: true
-    new_items: false
+ai:
+  model: "deepseek/deepseek-chat"
+  api_key: ""
+  timeout: 120
+  temperature: 1.0
+
+ai_analysis:
+  enabled: true
+  language: "Chinese"
+  include_rss: true
+  include_standalone: true
+
+ai_translation:
+  enabled: true
+  language: "中文"
+  scope:
     rss: true
-    standalone: true  # 开启独立展示，确保 Web3 资讯不被漏掉
-    ai_analysis: true
-  standalone:
-    # 强制 AI 深度分析这几个 Web3 源
-    platforms: ["wallstreetcn-hot"]
-    rss_feeds: ["theblockbeats", "foresight-news", "wushuo-blockchain"]
-    max_items: 15
+    standalone: true
+
+storage:
+  backend: "remote"
+  formats:
+    sqlite: true
+    html: true
+  local:
+    data_dir: "output"
 
 # ===============================================================
-# 6. 推送通知
+# 6. 其他高级设置
 # ===============================================================
 notification:
   enabled: true
   channels:
     telegram:
-      bot_token: ""  # 从 GitHub Secrets 读取 TELEGRAM_BOT_TOKEN
-      chat_id: ""    # 从 GitHub Secrets 读取 TELEGRAM_CHAT_ID
+      bot_token: ""
+      chat_id: ""
 
-# ===============================================================
-# 7. 存储配置 (R2 远程存储，用于查看历史记录)
-# ===============================================================
-storage:
-  backend: "remote"  # 激活 R2 模式
-
-  formats:
-    sqlite: true     # 存储历史数据库
-    html: true       # 生成网页版历史报告
-
-  local:
-    data_dir: "output"
-  
-  remote:
-    retention_days: 0
-    # 保持为空，程序会自动识别 S3_ 开头的 Secrets
-    endpoint_url: ""
-    bucket_name: ""
-    access_key_id: ""
-    secret_access_key: ""
-    region: ""
-
-# ===============================================================
-# 8. AI 模型配置
-# ===============================================================
-ai:
-  model: "deepseek/deepseek-chat"
-  api_key: ""        # 从 GitHub Secrets 读取 AI_API_KEY
-  timeout: 120
-  temperature: 1.0
-  max_tokens: 5000
-
-# ===============================================================
-# 9. AI 分析功能
-# ===============================================================
-ai_analysis:
-  enabled: true
-  language: "Chinese"
-  prompt_file: "ai_analysis_prompt.txt"
-  mode: "follow_report"
-  max_news_for_analysis: 150
-  include_rss: true  # Web3 分析必须包含 RSS 内容
-  include_standalone: true
-  include_rank_timeline: true
-
-# ===============================================================
-# 10. AI 翻译功能
-# ===============================================================
-ai_translation:
-  enabled: true
-  language: "中文"
-  scope:
-    hotlist: false
-    rss: true
-    standalone: true
-
-# ===============================================================
-# 11. 高级设置
-# ===============================================================
 advanced:
   debug: false
-  crawler:
-    request_interval: 2000
   rss:
-    request_interval: 1000
     timeout: 15
