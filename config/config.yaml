@@ -36,29 +36,28 @@ platforms:
 # ===============================================================
 rss:
   enabled: true
-  freshness_filter:
-    enabled: true
-    max_age_days: 1
   feeds:
     - id: "theblockbeats"
-      name: "律动 BlockBeats"
-      url: "https://www.theblockbeats.info/rss"
-    
-    - id: "foresight-news"
-      name: "Foresight News"
-      url: "https://foresightnews.com/rss"
-
-    - id: "wushuo-blockchain"
-      name: "吴说区块链"
-      url: "https://www.wushuo-blockchain.com/rss"
-
-    - id: "odaily"
-      name: "Odaily 星球日报"
-      url: "https://www.odaily.news/rss"
-
-    - id: "hacker-news-web3"
-      name: "Hacker News (Web3)"
-      url: "https://hnrss.org/frontpage?q=crypto|blockchain|web3|solana"
+      name: "律动"
+      url: "https://web3rss.vercel.app/theblockbeats" # 使用中转源更稳
+    - id: "foresight"
+      name: "Foresight"
+      url: "https://web3rss.vercel.app/foresightnews"
+    - id: "chaincatcher"
+      name: "链捕手"
+      url: "https://web3rss.vercel.app/chaincatcher"
+    - id: "goldenfinance"
+      name: "金色财经"
+      url: "http://api.jinse.com/no_auth/v1/ss/rss"
+      # --- 👨‍🌾 村长私人领地 ---
+    - id: "cunzhang-blog"
+      name: "村长博客"
+      url: "https://www.cunzhangblog.com/feed" # 如果你的域名变了，请记得修改这里
+      display:
+  standalone:
+    # 把村长博客加入独立分析区，AI 会专门为你的文章写摘要
+    rss_feeds: ["cunzhang-blog", "theblockbeats", "foresight-news"]
+    max_items: 20
 
 # ===============================================================
 # 4. 报告模式
