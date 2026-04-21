@@ -25,28 +25,28 @@ jobs:
           fetch-depth: 1
           clean: true
 
-      - name: Check Expiration
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          WORKFLOW_FILE="crawler.yml"
-          API_URL="repos/${{ github.repository }}/actions/workflows/$WORKFLOW_FILE/runs"
-          TOTAL=$(gh api "$API_URL" --jq '.total_count')
-          if [ -z "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
-            echo "No previous runs found"
-          else
-            LAST_PAGE=$(( (TOTAL + 99) / 100 ))
-            FIRST_RUN_DATE=$(gh api "$API_URL?per_page=100&page=$LAST_PAGE" --jq '.workflow_runs[-1].created_at')
-            if [ -n "$FIRST_RUN_DATE" ]; then
-              CURRENT_TIMESTAMP=$(date +%s)
-              FIRST_RUN_TIMESTAMP=$(date -d "$FIRST_RUN_DATE" +%s)
-              DIFF_SECONDS=$((CURRENT_TIMESTAMP - FIRST_RUN_TIMESTAMP))
-              if [ $DIFF_SECONDS -gt 604800 ]; then
-                gh workflow disable "$WORKFLOW_FILE"
-                exit 1
-              fi
-            fi
-          fi
+      # - name: Check Expiration
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     WORKFLOW_FILE="crawler.yml"
+      #     API_URL="repos/${{ github.repository }}/actions/workflows/$WORKFLOW_FILE/runs"
+      #     TOTAL=$(gh api "$API_URL" --jq '.total_count')
+      #     if [ -z "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
+      #       echo "No previous runs found"
+      #     else
+      #       LAST_PAGE=$(( (TOTAL + 99) / 100 ))
+      #       FIRST_RUN_DATE=$(gh api "$API_URL?per_page=100&page=$LAST_PAGE" --jq '.workflow_runs[-1].created_at')
+      #       if [ -n "$FIRST_RUN_DATE" ]; then
+      #         CURRENT_TIMESTAMP=$(date +%s)
+      #         FIRST_RUN_TIMESTAMP=$(date -d "$FIRST_RUN_DATE" +%s)
+      #         DIFF_SECONDS=$((CURRENT_TIMESTAMP - FIRST_RUN_TIMESTAMP))
+      #         if [ $DIFF_SECONDS -gt 604800 ]; then
+      #           gh workflow disable "$WORKFLOW_FILE"
+      #           exit 1
+      #         fi
+      #       fi
+      #     fi
 
       - name: Set up Python
         uses: actions/setup-python@v6
