@@ -78,7 +78,7 @@ rss:
     # --- 👨‍🌾 村长私人领地 ---
     - id: "cunzhang-blog"
       name: "村长博客"
-      url: "https://www.cunzhangblog.com/rss.xml"
+      url: "https://www.cunzhangblog.com/rss/feed.xml"
       category: "personal"
 
 # ===============================================================
